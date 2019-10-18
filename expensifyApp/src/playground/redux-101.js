@@ -1,14 +1,37 @@
 import { createStore } from "redux";
 
+const incrementCount = ({ incrementBy = 1 } = {}) => ({
+  type: "INCREMENT",
+  incrementBy
+});
+
+const decrementCount = ({ decrementBy = 1 } = {}) => ({
+  type: "DECREMENT",
+  decrementBy
+});
+
+const reset = () => ({
+  type: "RESET"
+});
+
+const setCount = ({ count = 1 } = {}) => ({
+  type: "SET",
+  count
+});
+
 const store = createStore((state = { count: 0 }, action) => {
   switch (action.type) {
     case "INCREMENT":
       return {
-        count: state.count + 1
+        count: state.count + action.incrementBy
       };
     case "DECREMENT":
       return {
-        count: state.count - 1
+        count: state.count - action.decrementBy
+      };
+    case "SET":
+      return {
+        count: action.count
       };
     case "RESET":
       return {
@@ -19,32 +42,17 @@ const store = createStore((state = { count: 0 }, action) => {
   }
 });
 
-console.log(store.getState());
-
-// Actions - than an object that gets ent to the store
-
-// I'd like to increment the count
-store.dispatch({
-  type: "INCREMENT"
+const unsubscribe = store.subscribe(() => {
+  console.log(store.getState());
 });
+store.dispatch(incrementCount({ incrementBy: 5 }));
 
-console.log(store.getState());
-store.dispatch({
-  type: "INCREMENT"
-});
+store.dispatch(incrementCount());
 
-console.log(store.getState());
+store.dispatch(reset());
 
-store.dispatch({
-  type: "RESET"
-});
+store.dispatch(decrementCount());
 
-console.log(store.getState());
+store.dispatch(decrementCount({ decrementBy: 10 }));
 
-store.dispatch({
-  type: "DECREMENT"
-});
-
-// I'd like to reset the count to zero
-
-console.log(store.getState());
+store.dispatch(setCount({ count: -100 }));
