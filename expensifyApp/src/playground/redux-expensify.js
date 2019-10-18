@@ -125,7 +125,7 @@ const getVisibleExpenses = (expenses, { text, sortBy, startDate, endDate }) => {
         case "date":
           return expense1.createdAt < expense2.createdAt ? 1 : -1;
         case "amount":
-          return expense1.amount < expense2.amount ? 1 : -1;
+          return expense2.amount - expense1.amount;
         default:
           return 0;
       }
